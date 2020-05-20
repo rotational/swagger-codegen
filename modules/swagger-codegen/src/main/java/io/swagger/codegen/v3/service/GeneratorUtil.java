@@ -197,10 +197,14 @@ public class GeneratorUtil {
         configurator.setInputSpec(inputSpec);
         configurator.setInputSpecURL(inputSpecURL);
 
+
         Boolean notNullJacksonAnnotation = ((Boolean) generationRequest.getOptions().getAdditionalProperties().get("notNullJacksonAnnotation"));
         if (notNullJacksonAnnotation != null) {
             configurator.setNotNullJacksonAnnotation(notNullJacksonAnnotation.booleanValue());
         }
+
+        configurator.setFlattenInlineSchema(generationRequest.getOptions().isFlattenInlineComposedSchemas());
+
 
         if (isNotEmpty(lang)) {
             configurator.setLang(lang);
@@ -236,6 +240,9 @@ public class GeneratorUtil {
         if (options.getSkipOverride() != null) {
             configurator.setSkipOverwrite(options.getSkipOverride());
         }
+        if (options.getResolveFully() != null) {
+            configurator.setResolveFully(options.getResolveFully());
+        }        
         if (isNotEmpty(options.getArtifactVersion())) {
             configurator.setArtifactVersion(options.getArtifactVersion());
         }

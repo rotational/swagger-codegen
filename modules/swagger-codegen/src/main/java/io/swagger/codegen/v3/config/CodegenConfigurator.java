@@ -52,6 +52,7 @@ public class CodegenConfigurator implements Serializable {
 
     private String lang;
     private String inputSpec;
+    private boolean flattenInlineSchema;
     private String inputSpecURL;
     private String outputDir;
     private boolean verbose;
@@ -72,6 +73,7 @@ public class CodegenConfigurator implements Serializable {
     private String artifactVersion;
     private String library;
     private String ignoreFileOverride;
+    private boolean resolveFully;
     private List<CodegenArgument> codegenArguments = new ArrayList<>();
     private Map<String, String> systemProperties = new HashMap<String, String>();
     private Map<String, String> instantiationTypes = new HashMap<String, String>();
@@ -420,6 +422,15 @@ public class CodegenConfigurator implements Serializable {
         return this;
     }
 
+    public boolean isResolveFully() {
+        return resolveFully;
+    }
+
+    public CodegenConfigurator setResolveFully(boolean resolveFully) {
+        this.resolveFully = resolveFully;
+        return this;
+    }
+
     public String loadSpecContent(String location, List<AuthorizationValue> auths) throws Exception{
             location = location.replaceAll("\\\\","/");
             String data = "";
@@ -465,10 +476,11 @@ public class CodegenConfigurator implements Serializable {
             config.setInputSpec(inputSpec);
             ParseOptions options = new ParseOptions();
             options.setResolve(true);
+            options.setResolveFully(resolveFully);
             options.setFlatten(true);
+            options.setFlattenComposedSchemas(flattenInlineSchema);
             SwaggerParseResult result = new OpenAPIParser().readContents(inputSpec, authorizationValues, options);
             OpenAPI openAPI = result.getOpenAPI();
-
             if (config.needsUnflattenedSpec()) {
                 ParseOptions optionsUnflattened = new ParseOptions();
                 optionsUnflattened.setResolve(true);
@@ -500,7 +512,9 @@ public class CodegenConfigurator implements Serializable {
             config.setInputURL(inputSpecURL);
             ParseOptions options = new ParseOptions();
             options.setResolve(true);
+            options.setResolveFully(resolveFully);
             options.setFlatten(true);
+            options.setFlattenComposedSchemas(flattenInlineSchema);
             SwaggerParseResult result = new OpenAPIParser().readLocation(inputSpecURL, authorizationValues, options);
             OpenAPI openAPI = result.getOpenAPI();
             LOGGER.debug("getClientOptInput - parsed inputSpecURL " + inputSpecURL);
@@ -641,11 +655,20 @@ public class CodegenConfigurator implements Serializable {
         return null;
     }
 
+
     public boolean isNotNullJacksonAnnotation() {
         return notNullJacksonAnnotation;
     }
 
     public void setNotNullJacksonAnnotation(boolean notNullJacksonAnnotation) {
         this.notNullJacksonAnnotation = notNullJacksonAnnotation;
+    }
+
+    public boolean isFlattenInlineSchem() {
+        return flattenInlineSchema;
+    }
+
+    public void setFlattenInlineSchema(boolean flattenInlineComposedSchemas) {
+        this.flattenInlineSchema = flattenInlineComposedSchemas;
     }
 }
