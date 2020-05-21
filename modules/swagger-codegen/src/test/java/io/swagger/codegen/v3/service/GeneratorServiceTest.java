@@ -41,7 +41,9 @@ public class GeneratorServiceTest {
             String relPath = f.getAbsolutePath().substring(path.length());
             if ("/src/main/java/io/swagger/client/model/OrderLineAudit.java".equals(relPath)) {
                 Assert.assertTrue(FileUtils.readFileToString(f).contains("@JsonInclude(JsonInclude.Include.NON_NULL)"));
+                Assert.assertTrue(FileUtils.readFileToString(f).contains("import com.fasterxml.jackson.annotation.JsonInclude;"));
             }
+
         }
     }
 
@@ -65,6 +67,7 @@ public class GeneratorServiceTest {
             String relPath = f.getAbsolutePath().substring(path.length());
             if ("/src/main/java/io/swagger/client/model/OrderLineAudit.java".equals(relPath)) {
                 Assert.assertFalse(FileUtils.readFileToString(f).contains("@JsonInclude(JsonInclude.Include.NON_NULL)"));
+                Assert.assertFalse(FileUtils.readFileToString(f).contains("import com.fasterxml.jackson.annotation.JsonInclude;"));
             }
         }
     }
@@ -90,7 +93,9 @@ public class GeneratorServiceTest {
         for (File f: files) {
             String relPath = f.getAbsolutePath().substring(path.length());
             if ("/src/main/java/io/swagger/client/model/OrderLineAudit.java".equals(relPath)) {
+                Assert.assertTrue(FileUtils.readFileToString(f).contains("import com.fasterxml.jackson.annotation.JsonInclude;"));
                 Assert.assertTrue(FileUtils.readFileToString(f).contains("@JsonInclude(JsonInclude.Include.NON_NULL)"));
+
             }
         }
     }
@@ -118,6 +123,7 @@ public class GeneratorServiceTest {
             String relPath = f.getAbsolutePath().substring(path.length());
             if ("/src/main/java/io/swagger/client/model/OrderLineAudit.java".equals(relPath)) {
                 Assert.assertFalse(FileUtils.readFileToString(f).contains("@JsonInclude(JsonInclude.Include.NON_NULL)"));
+                Assert.assertFalse(FileUtils.readFileToString(f).contains("import com.fasterxml.jackson.annotation.JsonInclude;"));
             }
         }
     }
